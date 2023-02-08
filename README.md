@@ -1,4 +1,6 @@
-### Objective
+# README
+
+## Objective
 
 Your assignment is to implement a URL shortening service using Python and any framework.
 
@@ -35,4 +37,25 @@ Please organize, design, test and document your code as if it were going into pr
 
 All the best and happy coding,
 
-The FINN GmbH Team
+## HOWTO
+
+### Requirements
+
+ * Python3
+ * Pipenv 
+
+### Getting Started
+```
+> cd project-directory
+> pipenv install
+> pipenv shell
+> pytest
+================================== test session starts ==================================
+platform darwin -- Python 3.10.7, pytest-7.2.1, pluggy-1.0.0
+rootdir: /Users/gregory.damiani/src/url-shortener
+collected 3 items
+
+test_flask.py ...                                                                 [100%]
+
+=================================== 3 passed in 0.15s ===================================
+```
