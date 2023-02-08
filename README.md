@@ -84,6 +84,6 @@ test_flask.py::test_encode_challenging_url PASSED                               
 
  * -use query strings instead of paths in URLs-
  * -use proper GET and POST verbs-
- * check for valid URL before doing work
+ * -check for valid URL before doing work-
  * gunicorn or other app container
  * dockerize

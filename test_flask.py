@@ -75,3 +75,31 @@ def test_encode_challenging_url(app):
     assert res.status_code == 200
     assert b"decode" in res.data
     assert res.json["result"] == "https://www.finn.com/en-US/pdp/tesla-model3-680-midnightsilvermetallic"
+
+
+# test bad urls
+def test_bad_urls(app):
+    res = app.post("/encode?url=foo")
+    assert res.status_code == 400
+    res = app.post("/encode?url=https://foo")
+    assert res.status_code == 400
+    res = app.post("/encode?url=https://foo")
+    assert res.status_code == 400
+    res = app.post("/encode?url= ")
+    assert res.status_code == 400
+
+
+# test bad verbs
+def test_bad_methods(app):
+    res = app.get("/encode?url=google.com")
+    assert res.status_code == 405
+    res = app.post("/decode/0xdeadbeef")
+    assert res.status_code == 405   
+    res = app.put("/encode?url=google.com")
+    assert res.status_code == 405
+    res = app.delete("/encode?url=google.com")
+    assert res.status_code == 405
+    res = app.patch("/encode?url=google.com")
+    assert res.status_code == 405
+
+

@@ -3,6 +3,7 @@ import string
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 import logging as logger
+import validators
 
 
 # create a simple lambda for generating short, random strings 9 bytes long
@@ -37,7 +38,10 @@ def create_app(config=None):
     def encode_url_arg():
         args = request.args
         url = args.to_dict().get("url")
-        print(url)
+        
+        # don't store invalid or malformed urls. allow for users to omit "https://"
+        if not validators.url(url) and not validators.url("https://" + url):
+          return "invalid URL", 400
 
         # encode the URL, check that it's not already a key in the database
         # break and re-encode, or store it as necessary and reply
