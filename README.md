@@ -52,15 +52,19 @@ All the best and happy coding,
 > cd project-directory
 > pipenv install
 > pipenv shell
-> pytest
-================================== test session starts ==================================
-platform darwin -- Python 3.10.7, pytest-7.2.1, pluggy-1.0.0
+> pytest --verbose
+=================================== test session starts ===================================
+platform darwin -- Python 3.10.7, pytest-7.2.1, pluggy-1.0.0 -- /Users/gregory.damiani/.local/share/virtualenvs/url-shortener-GAw33Mzq/bin/python
+cachedir: .pytest_cache
 rootdir: /Users/gregory.damiani/src/url-shortener
-collected 3 items
+collected 4 items
 
-test_flask.py ...                                                                 [100%]
+test_flask.py::test_get_root_url PASSED                                             [ 25%]
+test_flask.py::test_encode_url PASSED                                               [ 50%]
+test_flask.py::test_key_not_found PASSED                                            [ 75%]
+test_flask.py::test_decode_id PASSED                                                [100%]
 
-=================================== 3 passed in 0.15s ===================================
+==================================== 4 passed in 0.15s ====================================
 ```
 
 ### Running As A Basic Service in Test
@@ -68,10 +72,17 @@ test_flask.py ...                                                               
 > cd project-directory
 > pipenv install
 > pipenv shell
-> flask --app main run --host=0.0.0.0 0--port=8080
+> flask --app main run --host=0.0.0.0 --port=8080
 ...
 > curl localhost:8080/encode/google.com
 {"encode":"google.com","result":"8I3R1Z001"}
 > curl localhost:8080/decode/8I3R1Z001
 {"decode":"8I3R1Z001","result":"google.com"}
 ```
+
+## TODO
+
+ * use query strings instead of paths in URLs
+ * use proper GET and POST verbs
+ * gunicorn or other app container
+ * dockerize
