@@ -17,7 +17,10 @@ ShortLink is a URL shortening service where you enter a URL such as https://code
         -   /encode - Encodes a URL to a shortened URL
         -   /decode - Decodes a shortened URL to its original URL.
     -   Both endpoints should return JSON
--   There is no restriction on how your encode/decode algorithm should work. You just need to make sure that a URL can be encoded to a short URL and the short URL can be decoded to the original URL. **You do not need to persist short URLs to a database. Keep them in memory.**
+-   There is no restriction on how your encode/decode algorithm should work. You just need to make sure that a URL can be encoded to a short URL and the short URL can be decoded to the original URL. 
+
+**You do not need to persist short URLs to a database. Keep them in memory.**
+
 -   Provide detailed instructions on how to run your assignment in a separate markdown file
 -   Provide API tests for both endpoints
 
@@ -58,4 +61,17 @@ collected 3 items
 test_flask.py ...                                                                 [100%]
 
 =================================== 3 passed in 0.15s ===================================
+```
+
+### Running As A Basic Service in Test
+```
+> cd project-directory
+> pipenv install
+> pipenv shell
+> flask --app main run --host=0.0.0.0 0--port=8080
+...
+> curl localhost:8080/encode/google.com
+{"encode":"google.com","result":"8I3R1Z001"}
+> curl localhost:8080/decode/8I3R1Z001
+{"decode":"8I3R1Z001","result":"google.com"}
 ```
