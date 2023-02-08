@@ -31,7 +31,7 @@ def test_get_root_url(app):
 
 # test basic encoding
 def test_encode_url(app):
-    res = app.get("/encode/google.com")
+    res = app.post("/encode?url=google.com")
     assert res.status_code == 200
     assert b"encode" in res.data
     assert b"google.com" in res.data
@@ -50,7 +50,7 @@ def test_key_not_found(app):
 # test full encode/decode conversation
 def test_decode_id(app):
     # encode
-    res = app.get("/encode/www.finn.com")
+    res = app.post("/encode?url=www.finn.com")
     assert res.status_code == 200
     assert res.json["encode"] == "www.finn.com"
     result = res.json["result"]
@@ -60,3 +60,18 @@ def test_decode_id(app):
     assert res.status_code == 200
     assert b"decode" in res.data
     assert res.json["result"] == "www.finn.com"
+
+
+# test full encode/decode conversation with a more challenging urlstring
+def test_encode_challenging_url(app):
+    # encode
+    res = app.post("/encode?url=https://www.finn.com/en-US/pdp/tesla-model3-680-midnightsilvermetallic")
+    assert res.status_code == 200
+    assert res.json["encode"] == "https://www.finn.com/en-US/pdp/tesla-model3-680-midnightsilvermetallic"
+    result = res.json["result"]
+
+    # decode
+    res = app.get("/decode/" + result)
+    assert res.status_code == 200
+    assert b"decode" in res.data
+    assert res.json["result"] == "https://www.finn.com/en-US/pdp/tesla-model3-680-midnightsilvermetallic"

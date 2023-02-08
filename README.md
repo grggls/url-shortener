@@ -53,19 +53,19 @@ All the best and happy coding,
 > pipenv install
 > pipenv shell
 > pytest --verbose
-=================================== test session starts ===================================
+============================================================================== test session starts ===============================================================================
 platform darwin -- Python 3.10.7, pytest-7.2.1, pluggy-1.0.0 -- /Users/gregory.damiani/.local/share/virtualenvs/url-shortener-GAw33Mzq/bin/python
 cachedir: .pytest_cache
 rootdir: /Users/gregory.damiani/src/url-shortener
-collected 4 items
+collected 5 items
 
-test_flask.py::test_get_root_url PASSED                                             [ 25%]
-test_flask.py::test_encode_url PASSED                                               [ 50%]
-test_flask.py::test_key_not_found PASSED                                            [ 75%]
-test_flask.py::test_decode_id PASSED                                                [100%]
+test_flask.py::test_get_root_url PASSED                                                                                                                                    [ 20%]
+test_flask.py::test_encode_url PASSED                                                                                                                                      [ 40%]
+test_flask.py::test_key_not_found PASSED                                                                                                                                   [ 60%]
+test_flask.py::test_decode_id PASSED                                                                                                                                       [ 80%]
+test_flask.py::test_encode_challenging_url PASSED                                                                                                                          [100%]
 
-==================================== 4 passed in 0.15s ====================================
-```
+=============================================================================== 5 passed in 0.15s ================================================================================```
 
 ### Running As A Basic Service in Test
 ```
@@ -74,15 +74,16 @@ test_flask.py::test_decode_id PASSED                                            
 > pipenv shell
 > flask --app main run --host=0.0.0.0 --port=8080
 ...
-> curl localhost:8080/encode/google.com
-{"encode":"google.com","result":"8I3R1Z001"}
-> curl localhost:8080/decode/8I3R1Z001
-{"decode":"8I3R1Z001","result":"google.com"}
+> curl -X POST "localhost:8080/encode?url=https://www.google.com/search?q=finn+gmbh"
+{"encode":"https://www.google.com/search?q=finn gmbh","result":"GGE71A20B"}
+> curl -X GET localhost:8080/decode/GGE71A20B
+{"decode":"GGE71A20B","result":"https://www.google.com/search?q=finn gmbh"}
 ```
 
 ## TODO
 
- * use query strings instead of paths in URLs
- * use proper GET and POST verbs
+ * -use query strings instead of paths in URLs-
+ * -use proper GET and POST verbs-
+ * check for valid URL before doing work
  * gunicorn or other app container
  * dockerize

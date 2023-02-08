@@ -1,6 +1,6 @@
 import secrets
 import string
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
 from flask_cors import CORS
 import logging as logger
 
@@ -32,24 +32,27 @@ def create_app(config=None):
         logger.info("/")
         return "Hello, Url Shortener"
 
-    @app.route("/encode/<someUrl>")
-    def encode_url_arg(someUrl):
-        logger.info("/encode/%s", someUrl)
+
+    @app.route("/encode", methods=['POST'])
+    def encode_url_arg():
+        args = request.args
+        url = args.to_dict().get("url")
+        print(url)
 
         # encode the URL, check that it's not already a key in the database
         # break and re-encode, or store it as necessary and reply
         while True:
-          key = encode(someUrl)
+          key = encode(url)
           if key in url_database:
             logger.warning("collision on key: %s", key)
             break
           else:
-            url_database[key] = someUrl
-            result = jsonify({"encode": someUrl, "result": key})
-            logger.info(result)
+            url_database[key] = url
+            result = jsonify({"encode": url, "result": key})
             return result
 
-    @app.route("/decode/<someId>")
+
+    @app.route("/decode/<someId>", methods=['GET'])
     def decode_id_arg(someId):
         logger.info("/decode/%s", someId)
 
