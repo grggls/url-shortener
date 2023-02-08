@@ -47,25 +47,27 @@ All the best and happy coding,
  * Python3
  * Pipenv 
 
-### Getting Started
+### Running pytest
 ```
 > cd project-directory
 > pipenv install
 > pipenv shell
 > pytest --verbose
-============================================================================== test session starts ===============================================================================
+================================ test session starts ================================
 platform darwin -- Python 3.10.7, pytest-7.2.1, pluggy-1.0.0 -- /Users/gregory.damiani/.local/share/virtualenvs/url-shortener-GAw33Mzq/bin/python
 cachedir: .pytest_cache
 rootdir: /Users/gregory.damiani/src/url-shortener
-collected 5 items
+collected 7 items
 
-test_flask.py::test_get_root_url PASSED                                                                                                                                    [ 20%]
-test_flask.py::test_encode_url PASSED                                                                                                                                      [ 40%]
-test_flask.py::test_key_not_found PASSED                                                                                                                                   [ 60%]
-test_flask.py::test_decode_id PASSED                                                                                                                                       [ 80%]
-test_flask.py::test_encode_challenging_url PASSED                                                                                                                          [100%]
+test_flask.py::test_get_root_url PASSED                                       [ 14%]
+test_flask.py::test_encode_url PASSED                                         [ 28%]
+test_flask.py::test_key_not_found PASSED                                      [ 42%]
+test_flask.py::test_decode_id PASSED                                          [ 57%]
+test_flask.py::test_encode_challenging_url PASSED                             [ 71%]
+test_flask.py::test_bad_urls PASSED                                           [ 85%]
+test_flask.py::test_bad_methods PASSED                                        [100%]
 
-=============================================================================== 5 passed in 0.15s ================================================================================```
+================================= 7 passed in 0.25s =================================
 
 ### Running As A Basic Service in Test
 ```
@@ -80,10 +82,20 @@ test_flask.py::test_encode_challenging_url PASSED                               
 {"decode":"GGE71A20B","result":"https://www.google.com/search?q=finn gmbh"}
 ```
 
+### Running inside gunicorn
+Let's run our flask api inside gunicorn for speed and stability. We can only safely use on worker at the moment, because all shortened urls are stored in local memory. Once we move the URL storage to a shared database, we can increase the gunicorn workers as much as we want, only limited by the amount of memory we have available.
+```
+> cd project-directory
+> pipenv install
+> pipenv shell
+> gunicorn -w 1 --log-level DEBUG --bind 0.0.0.0:8080 'main:app'
+...
+```
+
 ## TODO
 
  * -use query strings instead of paths in URLs-
  * -use proper GET and POST verbs-
  * -check for valid URL before doing work-
- * gunicorn or other app container
+ * -gunicorn or other app container-
  * dockerize

@@ -9,6 +9,7 @@ flask = "*"
 flask-cors = "*"
 jinja2 = "*"
 validators = "*"
+gunicorn = "*"
 
 [dev-packages]
 
