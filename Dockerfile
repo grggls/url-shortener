@@ -1,7 +1,7 @@
 # Write a Dockerfile to run the url_shortener inside a containner
 
-# Use a full-featured (bloated) ubuntu container for ease of development
-FROM ubuntu:jammy as build
+# Use a start with a slim, kinda distroless container image
+FROM python:3.10-slim AS runnable
 
 # We're going to run the app as a non-root user
 ARG USERNAME=nonroot
@@ -18,22 +18,16 @@ ENV LC_ALL C.UTF-8
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONFAULTHANDLER 1
 
-# Install pipenv and compilation dependencies
-RUN apt-get update && \
-    apt-get install --yes gcc python3 python3-pip
-
-# Having some issues with the request or urllib library in this container
-RUN pip uninstall requests urllib3 pipenv
-RUN pip install requests urllib3 pipenv
-
-# Install our pipenv into its home directory
+# Setup our home directory and install our pipenv
 USER $USERNAME
 WORKDIR $USER_HOME
 COPY Pipfile .
 COPY Pipfile.lock .
 COPY main.py .
 
+RUN pip install pipenv
+ENV PATH="$USER_HOME/.local/bin:$PATH"
 RUN pipenv install --deploy
 
 ## Run the application
-ENTRYPOINT ["/usr/local/bin/pipenv", "run", "gunicorn", "--chdir", "/home/nonroot/", "main:app", "-w", "1", "--log-level", "ERROR", "--bind", "0.0.0.0:8000"]
+ENTRYPOINT ["pipenv", "run", "gunicorn", "--chdir", "/home/nonroot/", "main:app", "-w", "1", "--log-level", "ERROR", "--bind", "0.0.0.0:8000"]

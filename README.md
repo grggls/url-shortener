@@ -131,11 +131,33 @@ Hello, Url Shortener%
 > curl -X GET localhost:8000/decode/FEITCMXLM
 {"decode":"FEITCMXLM","result":"https://www.google.com/search?q=finn"}
 
+### Multi-stage build
+```
+> docker images url
+REPOSITORY   TAG       IMAGE ID       CREATED          SIZE
+url          latest    200e68033171   11 minutes ago   549MB
+```
+
+Let's see if we can make a multi-stage build to decrease the size of the image while we decrease the attack surface inside the running container.
+
+Starting from the following base image, creating the nonroot user, and running the app from $HOME yielded positive results:
+```
+FROM python:3.10-slim AS runnable
+```
+
+As seen here, we've improved the container size by more than 60%:
+```
+> docker images url
+REPOSITORY   TAG       IMAGE ID       CREATED              SIZE
+url          latest    0a38d237c812   About a minute ago   209MB
+```
+
+
 ## TODO
 
- * pylint, python best practices, dir structure
+ * -pylint, python best practices, dir structure-
  * security checks
- * multi-stage build
+ * -multistage or distroless docker build-
  * admin interface to list all stored/shortened urls
  * k8s config
  * better logging
