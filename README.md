@@ -10,14 +10,14 @@ ShortLink is a URL shortening service where you enter a URL such as https://code
 
 ### Tasks
 
--   Implement assignment using:
-    -   Language: **Python**
-    -   Framework: **any framework**
-    -   Two endpoints are required
-        -   /encode - Encodes a URL to a shortened URL
-        -   /decode - Decodes a shortened URL to its original URL.
-    -   Both endpoints should return JSON
--   There is no restriction on how your encode/decode algorithm should work. You just need to make sure that a URL can be encoded to a short URL and the short URL can be decoded to the original URL. 
+ - Implement assignment using:
+   - Language: **Python**
+   - Framework: **any framework**
+   - Two endpoints are required
+     -   /encode - Encodes a URL to a shortened URL
+     -   /decode - Decodes a shortened URL to its original URL.
+   - Both endpoints should return JSON
+ - There is no restriction on how your encode/decode algorithm should work. You just need to make sure that a URL can be encoded to a short URL and the short URL can be decoded to the original URL. 
 
 **You do not need to persist short URLs to a database. Keep them in memory.**
 
@@ -92,10 +92,51 @@ Let's run our flask api inside gunicorn for speed and stability. We can only saf
 ...
 ```
 
+### Running in Docker
+```
+> cd project-directory
+> docker build -t url .
+[+] Building 0.1s (15/15) FINISHED
+ => [internal] load build definition from Doc  0.0s
+ => => transferring dockerfile: 1.20kB         0.0s
+ => [internal] load .dockerignore              0.0s
+ => => transferring context: 2B                0.0s
+ => [internal] load metadata for docker.io/li  0.0s
+ => [internal] load build context              0.0s
+ => => transferring context: 88B               0.0s
+ => [ 1/10] FROM docker.io/library/ubuntu:jam  0.0s
+ => CACHED [ 2/10] RUN groupadd --gid 1000 no  0.0s
+ => CACHED [ 3/10] RUN apt-get update &&       0.0s
+ => CACHED [ 4/10] RUN pip uninstall requests  0.0s
+ => CACHED [ 5/10] RUN pip install requests u  0.0s
+ => CACHED [ 6/10] WORKDIR /home/nonroot       0.0s
+ => CACHED [ 7/10] COPY Pipfile .              0.0s
+ => CACHED [ 8/10] COPY Pipfile.lock .         0.0s
+ => CACHED [ 9/10] COPY main.py .              0.0s
+ => CACHED [10/10] RUN pipenv install --deplo  0.0s
+ => exporting to image                         0.0s
+ => => exporting layers                        0.0s
+ => => writing image sha256:91d5dc3be44255013  0.0s
+ => => naming to docker.io/library/url         0.0s
+
+> docker run -p 8000:8000 url &
+[1] 18055
+
+> curl localhost:8000
+Hello, Url Shortener%
+
+> curl -X POST "localhost:8000/encode?url=https://www.google.com/search?q=finn"
+{"encode":"https://www.google.com/search?q=finn","result":"FEITCMXLM"}
+
+> curl -X GET localhost:8000/decode/FEITCMXLM
+{"decode":"FEITCMXLM","result":"https://www.google.com/search?q=finn"}
+
 ## TODO
 
- * -use query strings instead of paths in URLs-
- * -use proper GET and POST verbs-
- * -check for valid URL before doing work-
- * -gunicorn or other app container-
- * dockerize
+ * pylint, python best practices, dir structure
+ * security checks
+ * multi-stage build
+ * admin interface to list all stored/shortened urls
+ * k8s config
+ * better logging
+ * figure out why the url shortener can't handle "+" characters
