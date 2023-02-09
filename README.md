@@ -51,6 +51,7 @@ test_flask.py::test_bad_urls PASSED                                           [ 
 test_flask.py::test_bad_methods PASSED                                        [100%]
 
 ================================= 7 passed in 0.25s =================================
+```
 
 ### Running As A Basic Service in Test
 ```
@@ -59,8 +60,10 @@ test_flask.py::test_bad_methods PASSED                                        [1
 > pipenv shell
 > flask --app main run --host=0.0.0.0 --port=8080
 ...
+
 > curl -X POST "localhost:8080/encode?url=https://www.google.com/search?q=finn+gmbh"
 {"encode":"https://www.google.com/search?q=finn gmbh","result":"GGE71A20B"}
+
 > curl -X GET localhost:8080/decode/GGE71A20B
 {"decode":"GGE71A20B","result":"https://www.google.com/search?q=finn gmbh"}
 ```
@@ -113,15 +116,16 @@ Hello, Url Shortener%
 
 > curl -X GET localhost:8000/decode/FEITCMXLM
 {"decode":"FEITCMXLM","result":"https://www.google.com/search?q=finn"}
+```
 
-### Multi-stage build
+### Distroless Container Build
 ```
 > docker images url
 REPOSITORY   TAG       IMAGE ID       CREATED          SIZE
 url          latest    200e68033171   11 minutes ago   549MB
 ```
 
-Let's see if we can make a multi-stage build to decrease the size of the image while we decrease the attack surface inside the running container.
+Let's see if we can do anything to decrease the size of the image while we decrease the attack surface inside the running container.
 
 Starting from the following base image, creating the nonroot user, and running the app from $HOME yielded positive results:
 ```
@@ -138,51 +142,10 @@ url          latest    0a38d237c812   About a minute ago   209MB
 
 ## TODO
 
- * -pylint, python best practices, dir structure-
- * security checks
- * -multistage or distroless docker build-
- * admin interface to list all stored/shortened urls
- * k8s config
- * better logging
- * figure out why the url shortener can't handle "+" characters
-
-## Objective
-
-Your assignment is to implement a URL shortening service using Python and any framework.
-
-### Brief
-
-ShortLink is a URL shortening service where you enter a URL such as https://codesubmit.io/library/react and it returns a short URL such as http://short.est/GeAi9K.
-
-### Tasks
-
- - Implement assignment using:
-   - Language: **Python**
-   - Framework: **any framework**
-   - Two endpoints are required
-     -   /encode - Encodes a URL to a shortened URL
-     -   /decode - Decodes a shortened URL to its original URL.
-   - Both endpoints should return JSON
- - There is no restriction on how your encode/decode algorithm should work. You just need to make sure that a URL can be encoded to a short URL and the short URL can be decoded to the original URL. 
-
-**You do not need to persist short URLs to a database. Keep them in memory.**
-
--   Provide detailed instructions on how to run your assignment in a separate markdown file
--   Provide API tests for both endpoints
-
-### Evaluation Criteria
-
--   **Python** best practices
--   API implemented featuring a /encode and /decode endpoint
--   Show us your work through your commit history
--   Completeness: did you complete the features? Are all the tests running?
--   Correctness: does the functionality act in sensible, thought-out ways?
--   Maintainability: is it written in a clean, maintainable way?
-
-
-### CodeSubmit
-
-Please organize, design, test and document your code as if it were going into production - then push your changes to the master branch. After you have pushed your code, you may submit the assignment on the assignment page.
-
-All the best and happy coding,
-
+ - [ ] -pylint, python best practices, dir structure-
+ - [ ] security checks
+ - [ ] -multistage or distroless docker build-
+ - [ ] admin interface to list all stored/shortened urls
+ - [ ] k8s config
+ - [ ] better logging
+ - [ ] figure out why the url shortener can't handle "+" characters
