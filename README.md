@@ -1,51 +1,34 @@
 # README
 
-## Objective
-
-Your assignment is to implement a URL shortening service using Python and any framework.
-
-### Brief
-
-ShortLink is a URL shortening service where you enter a URL such as https://codesubmit.io/library/react and it returns a short URL such as http://short.est/GeAi9K.
-
-### Tasks
-
- - Implement assignment using:
-   - Language: **Python**
-   - Framework: **any framework**
-   - Two endpoints are required
-     -   /encode - Encodes a URL to a shortened URL
-     -   /decode - Decodes a shortened URL to its original URL.
-   - Both endpoints should return JSON
- - There is no restriction on how your encode/decode algorithm should work. You just need to make sure that a URL can be encoded to a short URL and the short URL can be decoded to the original URL. 
-
-**You do not need to persist short URLs to a database. Keep them in memory.**
-
--   Provide detailed instructions on how to run your assignment in a separate markdown file
--   Provide API tests for both endpoints
-
-### Evaluation Criteria
-
--   **Python** best practices
--   API implemented featuring a /encode and /decode endpoint
--   Show us your work through your commit history
--   Completeness: did you complete the features? Are all the tests running?
--   Correctness: does the functionality act in sensible, thought-out ways?
--   Maintainability: is it written in a clean, maintainable way?
-
-
-### CodeSubmit
-
-Please organize, design, test and document your code as if it were going into production - then push your changes to the master branch. After you have pushed your code, you may submit the assignment on the assignment page.
-
-All the best and happy coding,
-
 ## HOWTO
 
 ### Requirements
 
  * Python3
  * Pipenv 
+
+### Quickstart
+
+I've included a simple Makefile in this directory. The default build target builds and runs the project in a Docker container, mapping localhost:8000 to the listening port of the service. As a last verification step, make curls that endpoint and should display the default response:
+```
+> make
+...
+[+] Building 0.1s (13/13) FINISHED
+...
+Hello, Url Shortener%
+```
+
+We can quickly verify the three endpoints work like so:
+```
+> curl localhost:8000
+Hello, Url Shortener%
+
+> curl -X POST "localhost:8000/encode?url=https://www.finn.com"
+{"encode":"https://www.finn.com","result":"LTJ0U4YHM"}
+
+> curl -X GET localhost:8000/decode/LTJ0U4YHM
+{"decode":"LTJ0U4YHM","result":"https://www.finn.com"}
+```
 
 ### Running pytest
 ```
@@ -162,3 +145,44 @@ url          latest    0a38d237c812   About a minute ago   209MB
  * k8s config
  * better logging
  * figure out why the url shortener can't handle "+" characters
+
+## Objective
+
+Your assignment is to implement a URL shortening service using Python and any framework.
+
+### Brief
+
+ShortLink is a URL shortening service where you enter a URL such as https://codesubmit.io/library/react and it returns a short URL such as http://short.est/GeAi9K.
+
+### Tasks
+
+ - Implement assignment using:
+   - Language: **Python**
+   - Framework: **any framework**
+   - Two endpoints are required
+     -   /encode - Encodes a URL to a shortened URL
+     -   /decode - Decodes a shortened URL to its original URL.
+   - Both endpoints should return JSON
+ - There is no restriction on how your encode/decode algorithm should work. You just need to make sure that a URL can be encoded to a short URL and the short URL can be decoded to the original URL. 
+
+**You do not need to persist short URLs to a database. Keep them in memory.**
+
+-   Provide detailed instructions on how to run your assignment in a separate markdown file
+-   Provide API tests for both endpoints
+
+### Evaluation Criteria
+
+-   **Python** best practices
+-   API implemented featuring a /encode and /decode endpoint
+-   Show us your work through your commit history
+-   Completeness: did you complete the features? Are all the tests running?
+-   Correctness: does the functionality act in sensible, thought-out ways?
+-   Maintainability: is it written in a clean, maintainable way?
+
+
+### CodeSubmit
+
+Please organize, design, test and document your code as if it were going into production - then push your changes to the master branch. After you have pushed your code, you may submit the assignment on the assignment page.
+
+All the best and happy coding,
+
